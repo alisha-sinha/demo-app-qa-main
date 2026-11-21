@@ -1,0 +1,10 @@
+# Maven build outputs
+**/target/
+*.jar
+*.war
+
+# Node / Next.js build outputs
+**/node_modules/
+**/.next/
+**/playwright-report/
+**/test-results/
