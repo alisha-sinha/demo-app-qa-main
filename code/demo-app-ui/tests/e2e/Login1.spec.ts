@@ -29,7 +29,7 @@ test.describe('Login Page', () => {
     await expect(loginPage.passwordInput).toHaveAttribute('aria-invalid', 'true');
   });
 
-  test.only('should log in and redirect to /claims with valid credentials', async ({ page }) => {
+  test('should log in and redirect to /claims with valid credentials', async ({ page }) => {
     // Replace with valid test user credentials
     await loginPage.enterEmail('claimant@demo.com');
     await loginPage.enterPassword('Claimant123!');

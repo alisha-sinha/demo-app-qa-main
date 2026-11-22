@@ -172,5 +172,37 @@ test.describe('API-02: Submit New Insurance Claim & Payload-to-Response Parity',
     }
   });
 
+  test('should reject invalid/negative claimAmount (-50) with HTTP 400 Bad Request', async () => {
+    const claimantApi = await request.newContext({
+      baseURL: BFF_BASE_URL,
+      storageState: CLAIMANT_STORAGE_PATH,
+    });
+
+    try {
+      const headers = await getCsrfHeaders(claimantApi);
+
+      // 4. Send POST /api/claims with negative claimAmount
+      const invalidRes = await claimantApi.post('/api/claims', {
+        headers,
+        data: {
+          ...validClaimPayload,
+          claimAmount: -50,
+        },
+      });
+
+      expect(
+        invalidRes.status(),
+        'Negative claimAmount must return HTTP 400 Bad Request'
+      ).toBe(400);
+
+      // Validate ProblemDetailDTO error structure
+      const errorBody = await invalidRes.json();
+      expect(errorBody.status).toBe(400);
+      expect(errorBody.detail || errorBody.title || errorBody.message).toBeTruthy();
+    } finally {
+      await claimantApi.dispose();
+    }
+  });
   
+
 });
